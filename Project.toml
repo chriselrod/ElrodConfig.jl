@@ -3,7 +3,22 @@ uuid = "9e751876-6467-44ce-a1c1-0fea061c1a4c"
 authors = ["Chris Elrod <elrodc@gmail.com> and contributors"]
 version = "1.0.0-DEV"
 
+[deps]
+BenchmarkTools = "6e4b80f9-dd63-53aa-95a3-0cdb28fa8baf"
+Crayons = "a8cc5b0e-0ffa-5ad4-8c14-923d3ee1735f"
+Cthulhu = "f68482b8-f384-11e8-15f7-abe071a5a75f"
+LinearAlgebra = "37e2e46d-f89d-539d-b4ee-838fcccc9c8e"
+MKL = "33e6dc65-8f57-5167-99aa-e5a354878fb2"
+OhMyREPL = "5fb14364-9ced-5910-84b2-373655c76a03"
+Revise = "295af30f-e4ad-537b-8983-00126c2a3abe"
+
 [compat]
+BenchmarkTools = "1"
+Crayons = "4"
+Cthulhu = "2"
+MKL = "0.6"
+OhMyREPL = "0.5"
+Revise = "3"
 julia = "1"
 
 [extras]
