@@ -1,0 +1,13 @@
+name = "ElrodConfig"
+uuid = "9e751876-6467-44ce-a1c1-0fea061c1a4c"
+authors = ["Chris Elrod <elrodc@gmail.com> and contributors"]
+version = "1.0.0-DEV"
+
+[compat]
+julia = "1"
+
+[extras]
+Test = "8dfed614-e22c-5e08-85e1-65c5234f0b40"
+
+[targets]
+test = ["Test"]
