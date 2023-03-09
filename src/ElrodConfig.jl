@@ -10,26 +10,21 @@ Cthulhu.CONFIG.enable_highlighter = true
 end
 
 macro cn(x)
-  ex = Expr(
-    :macrocall,
-    Symbol("@code_native"),
-    nothing,
-    :(debuginfo = :none),
-    :(syntax = :intel),
-    x
-  )
-  println("julia> ", ex)
-  esc(ex)
+  if Sys.ARCH === :x86_64
+    println("julia> @code_native syntax=:intel debuginfo=:none ", x)
+    :(@code_native syntax = :intel debuginfo = :none $x)
+  else
+    println("julia> @code_native debuginfo=:none ", x)
+    :(@code_native debuginfo = :none $x)
+  end
 end
 macro cl(x)
-  ex = :(@code_llvm debuginfo = :none $x)
   println("julia> @code_llvm debuginfo = :none ", x)
-  ex
+  :(@code_llvm debuginfo = :none $x)
 end
 macro d(x)
-  ex = :(@descend_code_warntype debuginfo = :none $x)
-  println("julia> @descend_code_warntype debuginfo = :none ", ex)
-  ex
+  println("julia> @descend_code_warntype debuginfo = :none ", x)
+  :(@descend_code_warntype debuginfo = :none $x)
 end
 
 using Crayons, OhMyREPL
