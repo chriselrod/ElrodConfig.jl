@@ -8,7 +8,7 @@
 My `~/.julia/config/startup.jl` is simply
 ```julia
 using ElrodConfig, LinearAlgebra
-# don't allow packages to prevent defining global variables named `pop` or `data`
-# by shadowing exports
+# don't allow packages to prevent defining global variables
+# named `pop` or `data` by shadowing exports
 pop = data = nothing
 ```
