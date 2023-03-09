@@ -2,8 +2,6 @@ module ElrodConfig
 
 using Revise, BenchmarkTools, LinearAlgebra
 using Cthulhu
-Cthulhu.CONFIG.asm_syntax = :intel
-Cthulhu.CONFIG.enable_highlighter = true
 
 @static if Sys.ARCH == :x86_64 && VERSION ≥ v"1.7.0-beta"
   using MKL
@@ -28,7 +26,6 @@ macro d(x)
 end
 
 using Crayons, OhMyREPL
-enable_autocomplete_brackets(false)
 import OhMyREPL: Passes.SyntaxHighlighter
 
 Base.text_colors[:light_black] = Base.text_colors[24]
@@ -53,5 +50,11 @@ colorscheme!("Penumbra Dark Contrast++")
 const _a = Ref{Any}()
 
 export @cn, @cl, @d, _a
+
+function __init__()
+  Cthulhu.CONFIG.asm_syntax = :intel
+  Cthulhu.CONFIG.enable_highlighter = true
+  enable_autocomplete_brackets(false)
+end
 
 end
