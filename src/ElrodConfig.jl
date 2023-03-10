@@ -49,7 +49,7 @@ colorscheme!("Penumbra Dark Contrast++")
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
 
-export @cn, @cl, @d, _a
+export @cn, @cl, @d, _a, includet
 
 function __init__()
   Cthulhu.CONFIG.asm_syntax = :intel
