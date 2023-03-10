@@ -1,7 +1,6 @@
 module ElrodConfig
 
-using Revise, BenchmarkTools, LinearAlgebra
-using Cthulhu
+using Revise, BenchmarkTools, LinearAlgebra, Cthulhu, InteractiveUtils
 
 @static if Sys.ARCH == :x86_64 && VERSION ≥ v"1.7.0-beta"
   using MKL
@@ -10,19 +9,22 @@ end
 macro cn(x)
   if Sys.ARCH === :x86_64
     println("julia> @code_native syntax=:intel debuginfo=:none ", x)
-    :(@code_native syntax = :intel debuginfo = :none $x)
+    esc(
+      :(ElrodConfig.InteractiveUtils.@code_native syntax = :intel debuginfo =
+        :none $x)
+    )
   else
     println("julia> @code_native debuginfo=:none ", x)
-    :(@code_native debuginfo = :none $x)
+    esc(:(ElrodConfig.InteractiveUtils.@code_native debuginfo = :none $x))
   end
 end
 macro cl(x)
   println("julia> @code_llvm debuginfo = :none ", x)
-  :(@code_llvm debuginfo = :none $x)
+  esc(:(ElrodConfig.InteractiveUtils.@code_llvm debuginfo = :none $x))
 end
 macro d(x)
   println("julia> @descend_code_warntype debuginfo = :none ", x)
-  :(@descend_code_warntype debuginfo = :none $x)
+  esc(:(ElrodConfig.Cthulhu.@descend_code_warntype debuginfo = :none $x))
 end
 
 using Crayons, OhMyREPL
