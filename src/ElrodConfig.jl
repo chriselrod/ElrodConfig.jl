@@ -57,6 +57,7 @@ function __init__()
   Cthulhu.CONFIG.asm_syntax = :intel
   Cthulhu.CONFIG.enable_highlighter = true
   enable_autocomplete_brackets(false)
+  BenchmarkTools.DEFAULT_PARAMETERS.seconds = 1
 end
 
 end
