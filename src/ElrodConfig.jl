@@ -58,6 +58,9 @@ function __init__()
   Cthulhu.CONFIG.enable_highlighter = true
   enable_autocomplete_brackets(false)
   BenchmarkTools.DEFAULT_PARAMETERS.seconds = 1
+  ccall(:jl_generating_output, Cint, ()) == 1 && return nothing
+  # let's not brush problems under a rug
+  @eval BenchmarkTools.gcscrub() = nothing
 end
 
 end
