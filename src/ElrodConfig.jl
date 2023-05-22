@@ -24,7 +24,7 @@ macro cl(x)
 end
 macro d(x)
   println("julia> @descend_code_warntype debuginfo = :none ", x)
-  esc(:(ElrodConfig.Cthulhu.@descend_code_warntype debuginfo = :none $x))
+  (:(ElrodConfig.Cthulhu.@descend_code_typed debuginfo=:none annotate_source=false iswarn=true $x))
 end
 
 using Crayons, OhMyREPL
@@ -51,7 +51,7 @@ colorscheme!("Penumbra Dark Contrast++")
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
 
-export @cn, @cl, @d, _a, includet, @btime, @benchmark, @belapsed
+export @cn, @cl, @d, _a, includet, @btime, @benchmark, @belapsed, @descend, @descend_code_typed, @descend_code_warntype
 
 function __init__()
   Cthulhu.CONFIG.asm_syntax = :intel
