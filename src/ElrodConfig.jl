@@ -9,21 +9,25 @@ end
 macro cn(x)
   if Sys.ARCH === :x86_64
     println("julia> @code_native syntax=:intel debuginfo=:none ", x)
-    :(ElrodConfig.InteractiveUtils.@code_native syntax = :intel debuginfo =
-      :none $(esc(x)))
+    esc(
+      :(ElrodConfig.InteractiveUtils.@code_native syntax = :intel debuginfo =
+        :none $x)
+    )
   else
     println("julia> @code_native debuginfo=:none ", x)
-    :(ElrodConfig.InteractiveUtils.@code_native debuginfo = :none $(esc(x)))
+    esc(:(ElrodConfig.InteractiveUtils.@code_native debuginfo = :none $x))
   end
 end
 macro cl(x)
   println("julia> @code_llvm debuginfo = :none ", x)
-  :(ElrodConfig.InteractiveUtils.@code_llvm debuginfo = :none $(esc(x)))
+  esc(:(ElrodConfig.InteractiveUtils.@code_llvm debuginfo = :none $x))
 end
 macro d(x)
   println("julia> @descend_code_warntype debuginfo = :none ", x)
-  :(ElrodConfig.Cthulhu.@descend_code_typed debuginfo = :none annotate_source =
-    false iswarn = true $(esc(x)))
+  esc(
+    :(ElrodConfig.Cthulhu.@descend_code_typed debuginfo = :none annotate_source =
+      false iswarn = true $x)
+  )
 end
 
 using Crayons, OhMyREPL
