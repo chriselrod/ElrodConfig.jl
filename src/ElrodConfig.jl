@@ -9,22 +9,21 @@ end
 macro cn(x)
   if Sys.ARCH === :x86_64
     println("julia> @code_native syntax=:intel debuginfo=:none ", x)
-    esc(
-      :(ElrodConfig.InteractiveUtils.@code_native syntax = :intel debuginfo =
-        :none $x)
-    )
+    :(ElrodConfig.InteractiveUtils.@code_native syntax = :intel debuginfo =
+      :none $(esc(x)))
   else
     println("julia> @code_native debuginfo=:none ", x)
-    esc(:(ElrodConfig.InteractiveUtils.@code_native debuginfo = :none $x))
+    :(ElrodConfig.InteractiveUtils.@code_native debuginfo = :none $(esc(x)))
   end
 end
 macro cl(x)
   println("julia> @code_llvm debuginfo = :none ", x)
-  esc(:(ElrodConfig.InteractiveUtils.@code_llvm debuginfo = :none $x))
+  :(ElrodConfig.InteractiveUtils.@code_llvm debuginfo = :none $(esc(x)))
 end
 macro d(x)
   println("julia> @descend_code_warntype debuginfo = :none ", x)
-  (:(ElrodConfig.Cthulhu.@descend_code_typed debuginfo=:none annotate_source=false iswarn=true $x))
+  :(ElrodConfig.Cthulhu.@descend_code_typed debuginfo = :none annotate_source =
+    false iswarn = true $(esc(x)))
 end
 
 using Crayons, OhMyREPL
@@ -51,7 +50,17 @@ colorscheme!("Penumbra Dark Contrast++")
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
 
-export @cn, @cl, @d, _a, includet, @btime, @benchmark, @belapsed, @descend, @descend_code_typed, @descend_code_warntype
+export @cn,
+  @cl,
+  @d,
+  _a,
+  includet,
+  @btime,
+  @benchmark,
+  @belapsed,
+  @descend,
+  @descend_code_typed,
+  @descend_code_warntype
 
 function __init__()
   Cthulhu.CONFIG.asm_syntax = :intel
