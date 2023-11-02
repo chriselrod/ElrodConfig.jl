@@ -33,23 +33,25 @@ end
 using Crayons, OhMyREPL
 import OhMyREPL: Passes.SyntaxHighlighter
 
-Base.text_colors[:light_black] = Base.text_colors[24]
-let penumbra_darkest = SyntaxHighlighter.ColorScheme()
-  SyntaxHighlighter.symbol!(penumbra_darkest, crayon"#1AC2E1")
-  SyntaxHighlighter.comment!(penumbra_darkest, crayon"#636363")
-  SyntaxHighlighter.string!(penumbra_darkest, crayon"#61C68A")
-  SyntaxHighlighter.call!(penumbra_darkest, crayon"#97A6FF")
-  SyntaxHighlighter.op!(penumbra_darkest, crayon"#F48E74")
-  SyntaxHighlighter.keyword!(penumbra_darkest, crayon"#E18DCE")
-  SyntaxHighlighter.function_def!(penumbra_darkest, crayon"#97A6FF")
-  SyntaxHighlighter.error!(penumbra_darkest, crayon"#F48E74")
-  SyntaxHighlighter.argdef!(penumbra_darkest, crayon"#1AC2E1")
-  SyntaxHighlighter.macro!(penumbra_darkest, crayon"#97A6FF")
-  SyntaxHighlighter.number!(penumbra_darkest, crayon"#C7AD40")
-  SyntaxHighlighter.text!(penumbra_darkest, crayon"#AEAEAE")
-  SyntaxHighlighter.add!("Penumbra Dark Contrast++", penumbra_darkest)
+function set_colors()
+  # Base.text_colors[:light_black] = Base.text_colors[24]
+  let catppuccin_mocha = SyntaxHighlighter.ColorScheme()
+    SyntaxHighlighter.symbol!(catppuccin_mocha, crayon"#1AC2E1")
+    SyntaxHighlighter.comment!(catppuccin_mocha, crayon"#6C7086")
+    SyntaxHighlighter.string!(catppuccin_mocha, crayon"#A6E3A1")
+    SyntaxHighlighter.call!(catppuccin_mocha, crayon"#89B4FA")
+    SyntaxHighlighter.op!(catppuccin_mocha, crayon"#89DCEB")
+    SyntaxHighlighter.keyword!(catppuccin_mocha, crayon"#CBA6F7")
+    SyntaxHighlighter.function_def!(catppuccin_mocha, crayon"#F38BA8")
+    SyntaxHighlighter.error!(catppuccin_mocha, crayon"#11111B")
+    SyntaxHighlighter.argdef!(catppuccin_mocha, crayon"#CDD6F4")
+    SyntaxHighlighter.macro!(catppuccin_mocha, crayon"#F9E2AF")
+    SyntaxHighlighter.number!(catppuccin_mocha, crayon"#FAB387")
+    SyntaxHighlighter.text!(catppuccin_mocha, crayon"#AEAEAE")
+    SyntaxHighlighter.add!("Catppuccin Mocha", catppuccin_mocha)
+  end
+  colorscheme!("Catppuccin Mocha")
 end
-colorscheme!("Penumbra Dark Contrast++")
 
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
@@ -74,6 +76,7 @@ function __init__()
   ccall(:jl_generating_output, Cint, ()) == 1 && return nothing
   # let's not brush problems under a rug
   @eval BenchmarkTools.gcscrub() = nothing
+  set_colors()
 end
 
 end
