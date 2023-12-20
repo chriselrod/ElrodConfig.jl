@@ -53,6 +53,22 @@ function set_colors()
   colorscheme!("Catppuccin Mocha")
 end
 
+import REPL
+# import REPL.LineEdit
+
+const mykeys = Dict{Any,Any}(
+   "\\M-l" => (s,o...)->write(stdout, "\e[H\033[3J\e[2J")
+    # Up Arrow
+    # "\e[A" => (s,o...)->(LineEdit.edit_move_up(s) || LineEdit.history_prev(s, LineEdit.mode(s).hist)),
+    # Down Arrow
+    # "\e[B" => (s,o...)->(LineEdit.edit_move_down(s) || LineEdit.history_next(s, LineEdit.mode(s).hist))
+)
+
+function customize_keys(repl)
+    repl.interface = REPL.setup_interface(repl; extra_repl_keymap = mykeys)
+end
+
+
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
 
@@ -77,6 +93,7 @@ function __init__()
   # let's not brush problems under a rug
   @eval BenchmarkTools.gcscrub() = nothing
   set_colors()
+  atreplinit(customize_keys)
 end
 
 end
