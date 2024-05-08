@@ -1,6 +1,6 @@
 module ElrodConfig
 
-using Revise, BenchmarkTools, LinearAlgebra, Cthulhu, InteractiveUtils
+using Revise, BenchmarkTools, LinearAlgebra, Cthulhu, InteractiveUtils, Pkg
 
 @static if Sys.ARCH == :x86_64 && VERSION ≥ v"1.7.0-beta"
   using MKL
@@ -28,6 +28,36 @@ macro d(x)
     :(ElrodConfig.Cthulhu.@descend_code_typed debuginfo = :none annotate_source =
       false iswarn = true $x)
   )
+end
+macro bmean(ex)
+  bench = Symbol("##bench##")
+  meant = Symbol("##meantime##")
+  alloc = Symbol("##alloc##")
+  t = BenchmarkTools.time
+  m = BenchmarkTools.memory
+  pt = BenchmarkTools.prettytime
+  pm = BenchmarkTools.prettytime
+  q = quote
+    local $bench = $BenchmarkTools.@benchmark $ex
+    local $meant = ($(BenchmarkTools.mean))($bench)
+    local $alloc = ($(BenchmarkTools.allocs))($meant)
+    println(
+      "  ",
+      $pt($t($meant)),
+      " (",
+      $alloc,
+      " allocation",
+      if $alloc == 1
+        ""
+      else
+        "s"
+      end,
+      ": ",
+      $pm($m($meant)),
+      ")"
+    )
+  end
+  esc(q)
 end
 
 using Crayons, OhMyREPL
@@ -57,17 +87,16 @@ import REPL
 # import REPL.LineEdit
 
 const mykeys = Dict{Any,Any}(
-   "\\M-l" => (s,o...)->write(stdout, "\e[H\033[3J\e[2J")
-    # Up Arrow
-    # "\e[A" => (s,o...)->(LineEdit.edit_move_up(s) || LineEdit.history_prev(s, LineEdit.mode(s).hist)),
-    # Down Arrow
-    # "\e[B" => (s,o...)->(LineEdit.edit_move_down(s) || LineEdit.history_next(s, LineEdit.mode(s).hist))
+  "\\M-l" => (s, o...) -> write(stdout, "\e[H\033[3J\e[2J")
+  # Up Arrow
+  # "\e[A" => (s,o...)->(LineEdit.edit_move_up(s) || LineEdit.history_prev(s, LineEdit.mode(s).hist)),
+  # Down Arrow
+  # "\e[B" => (s,o...)->(LineEdit.edit_move_down(s) || LineEdit.history_next(s, LineEdit.mode(s).hist))
 )
 
 function customize_keys(repl)
-    repl.interface = REPL.setup_interface(repl; extra_repl_keymap = mykeys)
+  repl.interface = REPL.setup_interface(repl; extra_repl_keymap = mykeys)
 end
-
 
 # `Main._a[] = ...` when debugging with Revise
 const _a = Ref{Any}()
@@ -80,6 +109,7 @@ export @cn,
   @btime,
   @benchmark,
   @belapsed,
+  @bmean,
   @descend,
   @descend_code_typed,
   @descend_code_warntype
